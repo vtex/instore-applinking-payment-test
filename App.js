@@ -9,6 +9,7 @@ import {
   Platform,
   Linking,
   StyleSheet,
+  ScrollView,
   Text,
   View
 } from 'react-native';
@@ -22,9 +23,17 @@ export default class App extends Component {
       url: null,
     };
     this._handleOpenUrl = this._handleOpenUrl.bind(this);
+    this._handleInitialUrl = this._handleInitialUrl.bind(this);
   }
 
-  _handleOpenUrl(url) {
+  _handleOpenUrl(event) {
+    if (event && event.url) {
+      console.log('URL is: ' + event.url);
+      this.setState({ url: event.url });
+    }
+  }
+
+  _handleInitialUrl(url) {
     if (url) {
       console.log('URL is: ' + url);
       this.setState({ url });
@@ -32,23 +41,23 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    const url = Linking.getInitialURL().then(this._handleOpenUrl)
+    Linking.getInitialURL().then(this._handleInitialUrl)
       .catch(err => console.error('An error occurred', err));
-    console.log('addEventListener url', url);
-    Linking.addEventListener('url', this._handleOpenURL);
+    console.log('addEventListener url');
+    Linking.addEventListener('url', this._handleOpenUrl);
   }
 
   componentWillUnmount() {
-    console.log('removeEventListener url', url);
-    Linking.removeEventListener('url', this._handleOpenURL);
+    console.log('removeEventListener url');
+    Linking.removeEventListener('url', this._handleOpenUrl);
   }
 
   render() {
     const platform = Platform.OS;
     const url = (this.state.url) ? this.state.url : "NENHUMA";
 
-    return (
-      <View style={styles.container}>
+    const infoView = (
+      <View>
         <Text style={styles.welcome}>
           URL: {url}
         </Text>
@@ -57,11 +66,27 @@ export default class App extends Component {
         </Text>
         <OpenURLButton url="https://www.facebook.com/" />
         <OpenURLButton url="instore://back/" />
-        <OpenURLButton url="sitef://recursion/" />
+        <OpenURLButton url="sitef://home/" />
         <Text style={styles.instructions}>
           Double tap R on your keyboard to reload,{'\n'}
           Shake or press menu button for dev menu
         </Text>
+      </View>
+    );
+
+    const createInfoChild = (infoChild, index) => (
+      <View key={index} style={styles.infoChild}>{infoChild}</View>
+    );
+
+    const numOfChilds = 1;
+
+    const infoViews = Array.from({length: numOfChilds}, (v, index) => createInfoChild(infoView, index));
+
+    return (
+      <View style={styles.container}>
+        <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContentContainer}>
+          {infoViews}
+        </ScrollView>
       </View>
     );
   }
@@ -73,6 +98,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+  },
+  scrollView: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: 'black',
+  },
+  scrollViewContentContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+  },
+  infoChild: {
+    borderWidth: 1,
+    borderColor: 'red',
   },
   welcome: {
     fontSize: 20,
