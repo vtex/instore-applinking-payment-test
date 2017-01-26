@@ -66,7 +66,7 @@ export default class App extends Component {
         </Text>
         <OpenURLButton url="https://www.facebook.com/" />
         <OpenURLButton url="instore://back/" />
-        <OpenURLButton url="sitef://home/" />
+        <OpenURLButton url="vtex-payment-test://home/" />
         <Text style={styles.instructions}>
           Double tap R on your keyboard to reload,{'\n'}
           Shake or press menu button for dev menu
@@ -95,24 +95,20 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 150,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
   scrollView: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: 'black',
   },
   scrollViewContentContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
   },
-  infoChild: {
-    borderWidth: 1,
-    borderColor: 'red',
-  },
+  infoChild: {},
   welcome: {
     fontSize: 20,
     textAlign: 'center',
