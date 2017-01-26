@@ -52,9 +52,41 @@ export default class App extends Component {
     Linking.removeEventListener('url', this._handleOpenUrl);
   }
 
+  getStonePayUrl(stoneCode) {
+    let url = `vtex-payment-test://pay/?acquirerId=${stoneCode}`;
+
+    url += '&' + [
+      "amount=200",
+      "installments=2",
+      "transactionId=10010",
+      "installments=2",
+      "paymentType=credit",
+    ].join('&');
+
+    return url;
+  }
+
+  getStoneCancelUrl(stoneCode) {
+    let url = `vtex-payment-test://cancel/?acquirerId=${stoneCode}`;
+
+    const itk = "2020";
+    const atk = "3030";
+
+    url += '&' + [
+      "transactionId=10010",
+      `paymentId=${itk}`,
+      `paymentAuthorization=${atk}`,
+    ].join('&');
+
+    return url;
+  }
+
   render() {
     const platform = Platform.OS;
     const url = (this.state.url) ? this.state.url : "NENHUMA";
+
+    const stonePayUrl = this.getStonePayUrl('954090369');
+    const stoneCancelUrl = this.getStoneCancelUrl('954090369');
 
     const infoView = (
       <View>
@@ -64,11 +96,11 @@ export default class App extends Component {
         <Text style={styles.instructions}>
           To get started, edit index.{platform}.js
         </Text>
-        <OpenURLButton url="https://www.facebook.com/" />
         <OpenURLButton url="instore://back/" />
         <OpenURLButton url="vtex-payment-test://home/" />
+        <OpenURLButton url={stonePayUrl} />
+        <OpenURLButton url={stoneCancelUrl} />
         <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
           Shake or press menu button for dev menu
         </Text>
       </View>
@@ -95,7 +127,7 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 150,
+    marginTop: 100,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
