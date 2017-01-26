@@ -8,14 +8,16 @@ help:
 	@cat Makefile | egrep '^([-a-zA-Z]+?):' | sed 's/:\(.*\)//g' | sed 's/^/- /g'
 
 setup:
-	npm install -g yarn
-	yarn
+	npm install
 
 run:
 	react-native run-ios
 
 android:
 	react-native run-android
+
+server:
+	npm start
 
 ios: run
 
