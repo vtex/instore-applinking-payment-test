@@ -53,7 +53,7 @@ export default class App extends Component {
   }
 
   getStonePayUrl(stoneCode) {
-    let url = `vtex-payment-test://pay/?acquirerId=${stoneCode}`;
+    let url = `stone-payment://pay/?acquirerId=${stoneCode}`;
 
     url += '&' + [
       "amount=200",
@@ -67,7 +67,7 @@ export default class App extends Component {
   }
 
   getStoneCancelUrl(stoneCode) {
-    let url = `vtex-payment-test://cancel/?acquirerId=${stoneCode}`;
+    let url = `stone-payment://cancel/?acquirerId=${stoneCode}`;
 
     const itk = "2020";
     const atk = "3030";
@@ -94,7 +94,7 @@ export default class App extends Component {
           URL: {url}
         </Text>
         <Text style={styles.instructions}>
-          To get started, edit index.{platform}.js
+          Edit App.js if you want to change parameters
         </Text>
         <OpenURLButton url="instore://back/" />
         <OpenURLButton url="vtex-payment-test://home/" />
@@ -140,7 +140,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
   },
-  infoChild: {},
   welcome: {
     fontSize: 20,
     textAlign: 'center',
@@ -149,6 +148,7 @@ const styles = StyleSheet.create({
   instructions: {
     textAlign: 'center',
     color: '#333333',
-    marginBottom: 5,
+    marginTop: 5,
+    marginBottom: 10,
   },
 });
