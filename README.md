@@ -2,6 +2,10 @@
 
 App to let the instore app and instore payments apps to test their linking features.
 
+## Docs
+
+See [docs](https://github.com/vtex/vtex-payment-test/blob/master/docs/) folder to know how to create an instore vtex payment app
+
 ## Linking back to this app
 
 You can link back to this app with the URI:
