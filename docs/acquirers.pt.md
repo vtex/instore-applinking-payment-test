@@ -4,10 +4,10 @@ Esse documento explica como a app do inStore configurará e fará o applinking p
 
 ## Campos de configuração por adquirente
 
-Configuração inicial no nosso gateway para os adquirentes:
+Configuração inicial no gateway da VTEX (nosso backend) para os adquirentes:
 
 * Geral (todos os adquirentes terão):
-  * acquirerProtocol: string (e.g.: stone, Cappta, vtex-sitef, etc.) - qual o protocolo do applinking (scheme de cada app)
+  * acquirerProtocol: string (e.g.: stone, cappta, vtex-sitef, etc.) - qual o protocolo do applinking (scheme de cada app)
   * scheme: string (protocolo para as respostas já preenchido por padrão com o protocolo "instore" que é a app da vtex que fará a integração com os adquirentes)
   * autoConfirm (já preenchido por padrão com "true")
 * Stone
@@ -52,7 +52,7 @@ stone://configuration/?acquirerId=954090369&scheme=instore
 URL:
 
 ```
-Cappta://configuration/?cnpj=12.243.189%2F0001-23&scheme=instore
+cappta://configuration/?cnpj=12.243.189%2F0001-23&scheme=instore
 ```
 
 - Exemplo de ação de "payment" da Stone:
@@ -103,7 +103,7 @@ Contexto do pagamento usado para montar a URL:
 URL:
 
 ```
-Cappta://payment/?cnpj=12.243.189%2F0001-23&paymentId=1093019889&paymentType=debit&amount=100&installments=1&transactionId=1093019040&autoConfirm=true&scheme=instore
+cappta://payment/?cnpj=12.243.189%2F0001-23&paymentId=1093019889&paymentType=debit&amount=100&installments=1&transactionId=1093019040&autoConfirm=true&scheme=instore
 ```
 
 Com os valores de resposta para o pagamento, será possível fazer o estorno.
@@ -153,7 +153,7 @@ Contexto do estorno:
 URL:
 
 ```
-Cappta://payment-reversal/?cnpj=12.243.189%2F0001-23&paymentId=1093019889&transactionId=1093019040&administrativePassword=cappta&administrativeCode=jabsis179009&autoConfirm=true&scheme=instore
+cappta://payment-reversal/?cnpj=12.243.189%2F0001-23&paymentId=1093019889&transactionId=1093019040&administrativePassword=cappta&administrativeCode=jabsis179009&autoConfirm=true&scheme=instore
 ```
 
 ### Respostas das ações
@@ -173,14 +173,13 @@ URL:
 
 ```
 Successo: instore://payment/?responsecode=0&<parametros_de_resposta>
-Falhou:   instore://payment/?responsecode=110&reason=erro+no+cartao+cancelado+pelo+cliente&<parametros_de_resposta>
+Falhou:   instore://payment/?responsecode=110&reason=erro+no+cartao+cancelado+pelo+cliente&paymentId=<valor_enviado_na_ida>
 ```
 
 Parametros de resposta da Stone:
   * scheme: "instore"
   * action: "payment"
   * paymentId: string (o mesmo enviado na ação de ida)
-  * acquirerId: string (e.g. "<stone_code>")
   * acquirerTid: string (e.g. "<stone_itk>")
   * acquirerAuthorizationCode: string (e.g. "<stone_atk>")
   * merchantReceipt: string (recibo do estabelecimento)
@@ -206,7 +205,7 @@ URL:
 
 ```
 Successo: instore://payment-reversal/?responsecode=0&<parametros_de_resposta>
-Falhou:   instore://payment-reversal/?responsecode=110&reason=erro+no+cartao+cancelado+pelo+cliente&<parametros_de_resposta>
+Falhou:   instore://payment-reversal/?responsecode=110&reason=erro+no+cartao+cancelado+pelo+cliente&paymentId=<valor_enviado_na_ida>
 ```
 
 Parametros de resposta da Stone:
