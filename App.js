@@ -52,30 +52,32 @@ export default class App extends Component {
     Linking.removeEventListener('url', this._handleOpenUrl);
   }
 
-  getStonePayUrl(stoneCode) {
-    let url = `stone-payment://pay/?acquirerId=${stoneCode}`;
+  getPaymentUrl(acquirerProtocol, acquirerId) {
+    let url = `${acquirerProtocol}://payment/?acquirerId=${acquirerId}`;
 
     url += '&' + [
+      "action=payment",
       "amount=200",
       "installments=2",
       "transactionId=10010",
+      "paymentId=1093019888",
       "installments=2",
       "paymentType=credit",
+      "autoConfirm=true",
+      "scheme=vtex-payment-test"
     ].join('&');
 
     return url;
   }
 
-  getStoneCancelUrl(stoneCode) {
-    let url = `stone-payment://cancel/?acquirerId=${stoneCode}`;
-
-    const itk = "2020";
-    const atk = "3030";
+  getRefundUrl(acquirerProtocol, acquirerId, paymentId, acquirerAuthorizationCode) {
+    let url = `${acquirerProtocol}://payment-reversal/?acquirerId=${acquirerId}`;
 
     url += '&' + [
       "transactionId=10010",
-      `paymentId=${itk}`,
-      `paymentAuthorization=${atk}`,
+      `paymentId=${paymentId}`,
+      `acquirerAuthorizationCode=${acquirerAuthorizationCode}`,
+      "scheme=vtex-payment-test"
     ].join('&');
 
     return url;
@@ -85,8 +87,8 @@ export default class App extends Component {
     const platform = Platform.OS;
     const url = (this.state.url) ? this.state.url : "NENHUMA";
 
-    const stonePayUrl = this.getStonePayUrl('954090369');
-    const stoneCancelUrl = this.getStoneCancelUrl('954090369');
+    const paymentUrl = this.getPaymentUrl('stone', '954090369');
+    const paymentRefund = this.getRefundUrl('stone', '954090369', '200', '100');
 
     const infoView = (
       <View>
@@ -96,28 +98,20 @@ export default class App extends Component {
         <Text style={styles.instructions}>
           Edit App.js if you want to change parameters
         </Text>
-        <OpenURLButton url="instore://back/" />
-        <OpenURLButton url="vtex-payment-test://home/" />
-        <OpenURLButton url={stonePayUrl} />
-        <OpenURLButton url={stoneCancelUrl} />
+        <OpenURLButton url="instore://payment/" />
+        <OpenURLButton url="vtex-payment-test://payment/" />
+        <OpenURLButton url={paymentUrl} />
+        <OpenURLButton url={paymentRefund} />
         <Text style={styles.instructions}>
           Shake or press menu button for dev menu
         </Text>
       </View>
     );
 
-    const createInfoChild = (infoChild, index) => (
-      <View key={index} style={styles.infoChild}>{infoChild}</View>
-    );
-
-    const numOfChilds = 1;
-
-    const infoViews = Array.from({length: numOfChilds}, (v, index) => createInfoChild(infoView, index));
-
     return (
       <View style={styles.container}>
         <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContentContainer}>
-          {infoViews}
+          {infoView}
         </ScrollView>
       </View>
     );
