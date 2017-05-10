@@ -7,11 +7,13 @@ Esse documento explica como a app do inStore configurará e fará o applinking p
 Configuração inicial no gateway da VTEX (nosso backend) para os adquirentes:
 
 * Geral (todos os adquirentes terão):
-  * acquirerProtocol: string (e.g.: stone, cappta, vtex-sitef, etc.) - qual o protocolo do applinking (scheme de cada app)
+  * acquirerProtocol: string (e.g.: stone, cielo-lio, cappta, vtex-sitef, etc.) - qual o protocolo do applinking (scheme de cada app)
   * scheme: string (protocolo para as respostas já preenchido por padrão com o protocolo "instore" que é a app da vtex que fará a integração com os adquirentes)
   * autoConfirm (já preenchido por padrão com "true")
 * Stone
   * acquirerId: string (<stone_code>)
+* Cielo Lio
+  * acquirerId: string
 * Sitef
   * acquirerId: string (<sitef_storeId>)
 * Cappta
@@ -37,7 +39,7 @@ instore://<action>/?<parametros_de_resposta>
 
 ### Exemplos de ida para cada ação
 
-Segue exemplos de ida para apps da Stone e Cappta.
+Segue exemplos de ida para apps da Stone, Cielo Lio e Cappta.
 
 - Exemplo de ação de "configuration" da Stone:
 
@@ -45,6 +47,14 @@ URL:
 
 ```
 stone://configuration/?acquirerId=954090369&scheme=instore
+```
+
+- Exemplo de ação de "configuration" da Cielo Lio:
+
+URL:
+
+```
+cielo-lio://configuration/?acquirerId=954090369&scheme=instore
 ```
 
 - Exemplo de ação de "configuration" da Cappta:
@@ -79,6 +89,32 @@ URL:
 
 ```
 stone://payment/?acquirerId=954090369&paymentId=1093019888&paymentType=credit&amount=10&installments=3&transactionId=1093019039&autoConfirm=true&scheme=instore
+```
+
+- Exemplo de ação de "payment" da Cielo Lio:
+
+Contexto do pagamento usado para montar a URL:
+
+```
+{
+  acquirerProtocol: "cielo-lio",
+  action: "payment",
+  acquirerId: "954090369",
+  installments: 3,
+  paymentType: "credit",
+  amount: 10, // as apps esperam o valor em centavos (10 centavos)
+  installmentsInterestRate: "1%", (se não tiver juros, então não é nem para estar no mobileLinkingUrl)
+  transactionId: "1093019039",
+  paymentId: "1093019888",
+  scheme: "instore",
+  autoConfirm: "true"
+}
+```
+
+URL:
+
+```
+cielo-lio://payment/?acquirerId=954090369&paymentId=1093019888&paymentType=credit&amount=10&installments=3&transactionId=1093019039&autoConfirm=true&scheme=instore
 ```
 
 - Exemplo de ação de "payment" da Cappta:
@@ -129,7 +165,31 @@ Contexto do estorno:
 URL:
 
 ```
-stone://payment-reversal/?acquirerId=954090369&paymentId=1093019888&acquirerTid=1093019888&acquirerAuthorizationCode=1093019880&transactionId=1093019039&autoConfirm=true&scheme=instore
+cielo-lio://payment-reversal/?acquirerId=954090369&paymentId=1093019888&acquirerTid=1093019888&acquirerAuthorizationCode=1093019880&transactionId=1093019039&autoConfirm=true&scheme=instore
+```
+
+- Exemplo de ação de "payment-reversal" (estorno) da Cielo Lio:
+
+Contexto do estorno:
+
+```
+{
+  acquirerProtocol: "cielo-lio",
+  action: "payment-reversal",
+  acquirerId: "954090369",
+  transactionId: "1093019039",
+  paymentId: "1093019888",
+  acquirerTid: "1093019888",
+  acquirerAuthorizationCode: "1093019880"
+  autoConfirm: "true",
+  scheme: "instore",
+}
+```
+
+URL:
+
+```
+cielo-lio://payment-reversal/?acquirerId=954090369&paymentId=1093019888&acquirerTid=1093019888&acquirerAuthorizationCode=1093019880&transactionId=1093019039&autoConfirm=true&scheme=instore
 ```
 
 - Exemplo de ação de "payment-reversal" (estorno) da Cappta:
@@ -167,7 +227,7 @@ Successo: instore://configuration/?responsecode=0
 Falhou:   instore://configuration/?responsecode=100&reason=codigo+100+problema+no+pinpad
 ```
 
-- Exemplo de resposta da ação de "payment" da Stone e Cappta:
+- Exemplo de resposta da ação de "payment" da Stone, Cielo Lio e Cappta:
 
 URL:
 
@@ -187,6 +247,17 @@ Parametros de resposta da Stone:
   * responsecode: int (0 significa sucesso e um "numero maior que 0" significa um código de erro do adquirente e nesse caso reason será uma mensagem de erro)
   * reason: string (em caso de sucesso fica vazio e em caso de erro contém a mensagem de erro)
 
+Parametros de resposta da Cielo Lio:
+  * scheme: "instore"
+  * action: "payment"
+  * paymentId: string (o mesmo enviado na ação de ida)
+  * acquirerTid: string (número que identifica o pagamento para a Cielo)
+  * acquirerAuthorizationCode: string (número que autoriza o estorno para a Cielo)
+  * merchantReceipt: string (recibo do estabelecimento)
+  * customerReceipt: string (recibo do cliente)
+  * responsecode: int (0 significa sucesso e um "numero maior que 0" significa um código de erro do adquirente e nesse caso reason será uma mensagem de erro)
+  * reason: string (em caso de sucesso fica vazio e em caso de erro contém a mensagem de erro)
+
 Parametros de resposta da Cappta:
   * scheme: "instore"
   * action: "payment"
@@ -199,7 +270,7 @@ Parametros de resposta da Cappta:
   * responsecode: int (0 significa sucesso e um "numero maior que 0" significa um código de erro do adquirente e nesse caso reason será uma mensagem de erro)
   * reason: string (em caso de sucesso fica vazio e em caso de erro contém a mensagem de erro)
 
-- Exemplo de resposta da ação de "payment-reversal" da Stone e Cappta:
+- Exemplo de resposta da ação de "payment-reversal" da Stone, Cielo Lio e Cappta:
 
 URL:
 
@@ -209,6 +280,15 @@ Falhou:   instore://payment-reversal/?responsecode=110&reason=erro+no+cartao+can
 ```
 
 Parametros de resposta da Stone:
+  * scheme: "instore"
+  * action: "payment-reversal"
+  * paymentId: string (e.g. "1093019888") // para identificar qual operação de estorno foi feita
+  * merchantReceipt: string (recibo do estabelecimento do estorno)
+  * customerReceipt: string (recibo do cliente do estorno)
+  * responsecode: int (0 significa sucesso e um "numero maior que 0" significa um código de erro do adquirente e nesse caso reason será uma mensagem de erro)
+  * reason: string (em caso de sucesso fica vazio e em caso de erro contém a mensagem de erro)
+
+Parametros de resposta da Cielo Lio:
   * scheme: "instore"
   * action: "payment-reversal"
   * paymentId: string (e.g. "1093019888") // para identificar qual operação de estorno foi feita
