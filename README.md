@@ -6,11 +6,18 @@ App to let the instore app and instore payments apps to test their linking featu
 
 See [docs](https://github.com/vtex/vtex-payment-test/blob/master/docs/) folder to know how to create an instore vtex payment app
 
+## Linking to your app
+
+This app links to an app that accept the uri stone://payment?params (see the docs folder above to know how it works).
+
+You can easily change the scheme from "stone" to your app's scheme by editing the render method of https://github.com/vtex/vtex-payment-test/blob/master/App.js
+
 ## Linking back to this app
 
 You can link back to this app with the URI:
 
-vtex-payment-test://home?params
+vtex-payment-test://payment?params // for payment applinking
+vtex-payment-test://payment-reversal?params // for a refund applinking
 
 ## Development
 
