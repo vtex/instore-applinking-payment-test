@@ -23,6 +23,8 @@ vtex-payment-test://payment-reversal?params // for a refund applinking
 
 Execute any make command on the terminal of your machine (normally works on Linux and Mac).
 
+This is a React Native example App, on Makefile have helpers to how to setup and test (as you can see below). But you can also see React Native's documentation if you have any doubts on how to run it: https://facebook.github.io/react-native/docs/getting-started.html (the "Building Projects with Native Code" can be a good place to start)
+
 ### Setup project
 
 make setup (need node and npm installed on your machine)
