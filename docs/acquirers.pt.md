@@ -47,7 +47,7 @@ instore://<action>/?<parametros_de_resposta>
 
 ### Exemplos de ida para cada ação
 
-- Exemplo de ação de "configuration":
+##### - Exemplo de ação de "configuration":
 
 Contexto de configuração usado para montar a URL:
 
@@ -67,7 +67,8 @@ URL:
 super-adquirente://configuration/?acquirerProtocol=super-adquirente&action=configuration&acquirerId=954090369&scheme=instore
 ```
 
-- Exemplo de ação de "payment":
+
+##### - Exemplo de ação de "payment":
 
 Contexto do pagamento usado para montar a URL:
 
@@ -101,7 +102,8 @@ super-adquirente://payment?acquirerProtocol=super-adquirente&action=payment&acqu
 
 Com os valores de resposta para o pagamento, será possível fazer o estorno.
 
-- Exemplo de ação de "payment-reversal" (estorno):
+
+##### - Exemplo de ação de "payment-reversal" (estorno):
 
 Contexto do estorno:
 
@@ -129,7 +131,8 @@ super-adquirente://payment-reversal/?acquirerId=954090369&transactionId=10930190
 
 ### Respostas das ações
 
-- Exemplo de resposta da ação de "configuration":
+##### - Exemplo de resposta da ação de "configuration":
+
 
 URL:
 
@@ -138,7 +141,7 @@ Successo: instore://configuration/?responsecode=0
 Falhou:   instore://configuration/?responsecode=100&reason=codigo+100+problema+no+pinpad
 ```
 
-- Exemplo de resposta da ação de "payment":
+##### - Exemplo de resposta da ação de "payment":
 
 URL:
 
@@ -159,7 +162,8 @@ Parâmetros de resposta:
   * reason: string (em caso de sucesso fica vazio e em caso de erro contém a mensagem de erro)
   * success: true ou false (gerado pela app, dado a regra de responsecode)
 
-- Exemplo de resposta da ação de "payment-reversal":
+
+##### - Exemplo de resposta da ação de "payment-reversal":
 
 URL:
 
@@ -168,7 +172,7 @@ Successo: instore://payment-reversal/?responsecode=0&<parametros_de_resposta>
 Falhou:   instore://payment-reversal/?responsecode=110&reason=erro+no+cartao+cancelado+pelo+cliente&paymentId=<valor_enviado_na_ida>
 ```
 
-Parâmetros de resposta da Stone:
+Parâmetros de resposta:
   * scheme: "instore"
   * action: "payment-reversal"
   * paymentId: string (e.g. "1093019888") // para identificar qual operação de estorno foi feita
