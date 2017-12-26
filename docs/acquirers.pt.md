@@ -19,7 +19,7 @@ A integração via AppLinking não inclui nenhuma dependência extra, uma vez qu
   * acquirerProtocol: string (ex.: stone, cielo-lio, cappta, vtex-sitef, etc.) - qual o protocolo do applinking (scheme de cada app)
   * scheme: string (protocolo para as respostas já preenchido por padrão com o protocolo "instore" que é a app da vtex que fará a integração com os adquirentes)
   * autoConfirm (já preenchido por padrão com "true". Pode ser utilizado para avisar a app que não é necessário pedir confirmação extra do usuário para fazer a transação)
-  * acquirerId: string (ex.:<stone_code>, <sitef_storeId>)
+  * acquirerId: string (ex.:<stone_code>, <sitef_storeId>) id da afiliação cadastrado no gateway da VTEX
 
 Se for necessário, podemos enviar informações específicas que sejam importantes para a adquirente. Exemplo:
 
@@ -129,6 +129,12 @@ URL:
 super-adquirente://payment-reversal/?acquirerId=954090369&transactionId=1093019039&paymentId=1093019888&acquirerTid=1093019888&administrativeCode=11010103033&autoConfirm=true&scheme=instore
 ```
 
+> Observação:
+>
+> Nem todos os parâmetros que o VTEX inStore envia serão utilizados por todas as adquirentes. Exemplo:
+> • transactionId: É a identificação da transação. Uma transação pode conter vários pagamentos, uma vez que a compra tenha sido dividida em vários cartões, então esse código identifica a compra inteira no gateway da VTEX.
+
+
 ### Respostas das ações
 
 ##### - Exemplo de resposta da ação de "configuration":
@@ -146,16 +152,16 @@ Falhou:   instore://configuration/?responsecode=100&reason=codigo+100+problema+n
 URL:
 
 ```
-Successo: instore://payment/?responsecode=0&<parametros_de_resposta>
-Falhou:   instore://payment/?responsecode=110&reason=erro+no+cartao+cancelado+pelo+cliente&paymentId=<valor_enviado_na_ida>
+Successo: instore://payment?responsecode=0&<parametros_de_resposta>
+Falhou:   instore://payment?responsecode=110&reason=erro+no+cartao+cancelado+pelo+cliente&paymentId=<valor_enviado_na_ida>
 ```
 
 Parâmetros de resposta:
   * scheme: "instore"
   * action: "payment"
-  * paymentId: string (o mesmo enviado na ação de ida)
-  * acquirerTid: string (número que identifica o pagamento)
-  * administrativeCode: string (número que autoriza o estorno)
+  * paymentId: string (identificação do pagamento na VTEX)
+  * acquirerTid: string (número que identifica o pagamento na adquirente)
+  * acquirerAuthorizationCode ou administrativeCode: string (código de autorização que recebemos da adquirente no pagamento e repassamos no momento do estorno)
   * merchantReceipt: string (recibo do estabelecimento)
   * customerReceipt: string (recibo do cliente)
   * responsecode: int (0 significa sucesso e um "numero maior que 0" significa um código de erro do adquirente e nesse caso reason será uma mensagem de erro)
@@ -175,8 +181,8 @@ Falhou:   instore://payment-reversal/?responsecode=110&reason=erro+no+cartao+can
 Parâmetros de resposta:
   * scheme: "instore"
   * action: "payment-reversal"
-  * paymentId: string (e.g. "1093019888") // para identificar qual operação de estorno foi feita
-  * administrativeCode: string (número que autorizou o estorno)
+  * paymentId: string (e.g. "1093019888") para identificar qual pagamento foi estornado
+  * acquirerAuthorizationCode ou administrativeCode: string (código de autorização que recebemos da adquirente no pagamento e repassamos no momento do estorno)
   * merchantReceipt: string (recibo do estabelecimento do estorno)
   * customerReceipt: string (recibo do cliente do estorno)
   * responsecode: int (0 significa sucesso e um "número maior que 0" significa um código de erro do adquirente e nesse caso reason será uma mensagem de erro)
