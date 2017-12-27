@@ -34,13 +34,13 @@ Se for necessário, podemos enviar informações específicas que sejam importan
 Padrão da url de ida do applinking:
 
 ```
-<acquirerProtocol>://<action>/?<parametros>
+<acquirerProtocol>://<action>?<parametros>
 ```
 
 Padrão da url de volta do applinking:
 
 ```
-instore://<action>/?<parametros_de_resposta>
+instore://<action>?<parametros_de_resposta>
 ```
 
 * action: é uma opção entre `configuration`, `payment` e `payment-reversal` (ação de estorno de um pagamento).
@@ -57,14 +57,14 @@ Contexto de configuração usado para montar a URL:
   action: "configuration",
   acquirerId: "954090369",
   scheme: "instore",
-  mobileLinkingUrl: "super-adquirente://configuration/?acquirerId=954090369&scheme=instore"
+  mobileLinkingUrl: "super-adquirente://configuration?acquirerId=954090369&scheme=instore"
 }
 ```
 
 URL:
 
 ```
-super-adquirente://configuration/?acquirerProtocol=super-adquirente&action=configuration&acquirerId=954090369&scheme=instore
+super-adquirente://configuration?acquirerProtocol=super-adquirente&action=configuration&acquirerId=954090369&scheme=instore
 ```
 
 
@@ -90,7 +90,7 @@ Contexto do pagamento usado para montar a URL:
   paymentSystemName: "Venda Direta Debito",
   paymentGroupName: "debitDirectSalePaymentGroup",
   callbackUrl: "https://dominio/gatewayCallback/.../", // Para mandarmos a resposta, não precisa estar no mobileLinkingUrl
-  mobileLinkingUrl: "super-adquirente://payment/?acquirerId=954090369&paymentId=1093019888&paymentType=credit&amount=10&installments=3&transactionId=1093019039&autoConfirm=true&scheme=instore"
+  mobileLinkingUrl: "super-adquirente://payment?acquirerId=954090369&paymentId=1093019888&paymentType=credit&amount=10&installments=3&transactionId=1093019039&autoConfirm=true&scheme=instore"
 }
 ```
 
@@ -119,14 +119,14 @@ Contexto do estorno:
   autoConfirm: "true",
   scheme: "instore",
   callbackUrl: "https://dominio/gatewayCallback/.../", // Para mandarmos a resposta, não precisa estar no mobileLinkingUrl
-  mobileLinkingUrl: "super-adquirente://payment-reversal/?acquirerId=954090369&paymentId=1093019888&transactionId=1093019039&autoConfirm=true&scheme=instore"
+  mobileLinkingUrl: "super-adquirente://payment-reversal?acquirerId=954090369&paymentId=1093019888&transactionId=1093019039&autoConfirm=true&scheme=instore"
 }
 ```
 
 URL:
 
 ```
-super-adquirente://payment-reversal/?acquirerId=954090369&transactionId=1093019039&paymentId=1093019888&acquirerTid=1093019888&administrativeCode=11010103033&autoConfirm=true&scheme=instore
+super-adquirente://payment-reversal?acquirerId=954090369&transactionId=1093019039&paymentId=1093019888&acquirerTid=1093019888&administrativeCode=11010103033&autoConfirm=true&scheme=instore
 ```
 
 > Observação:
@@ -143,8 +143,8 @@ super-adquirente://payment-reversal/?acquirerId=954090369&transactionId=10930190
 URL:
 
 ```
-Successo: instore://configuration/?responsecode=0
-Falhou:   instore://configuration/?responsecode=100&reason=codigo+100+problema+no+pinpad
+Successo: instore://configuration?responsecode=0
+Falhou:   instore://configuration?responsecode=100&reason=codigo+100+problema+no+pinpad
 ```
 
 ##### - Exemplo de resposta da ação de "payment":
@@ -174,8 +174,8 @@ Parâmetros de resposta:
 URL:
 
 ```
-Successo: instore://payment-reversal/?responsecode=0&<parametros_de_resposta>
-Falhou:   instore://payment-reversal/?responsecode=110&reason=erro+no+cartao+cancelado+pelo+cliente&paymentId=<valor_enviado_na_ida>
+Successo: instore://payment-reversal?responsecode=0&<parametros_de_resposta>
+Falhou:   instore://payment-reversal?responsecode=110&reason=erro+no+cartao+cancelado+pelo+cliente&paymentId=<valor_enviado_na_ida>
 ```
 
 Parâmetros de resposta:
