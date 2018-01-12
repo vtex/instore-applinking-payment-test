@@ -160,6 +160,8 @@ Parâmetros de resposta:
   * scheme: "instore"
   * action: "payment"
   * paymentId: string (identificação do pagamento na VTEX)
+  * cardBrandName: string (bandeira do cartão, informação necessária para gerar o cupom fiscal)
+  * acquirerName: string (nome do adquirente - opcional)
   * acquirerTid: string (número que identifica o pagamento na adquirente)
   * acquirerAuthorizationCode ou administrativeCode: string (código de autorização que recebemos da adquirente no pagamento e repassamos no momento do estorno)
   * merchantReceipt: string (recibo do estabelecimento)
