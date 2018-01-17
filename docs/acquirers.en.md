@@ -1,28 +1,28 @@
 # App Linking
 
-This documentation explains how inStore's app execute it's AppLinking feature (android's Intent or RCTLinking on iOS) with the possible actions: `payment` and `payment-reversal` that are sent to the payment app that are integrated with inStore.
+This documentation explains how inStore's app execute it's AppLinking feature (Android's `Intent` or RCTLinking on iOS) with the possible actions: `payment` and `payment-reversal` that are sent to the payment app integrated with inStore.
 
 ## VTEX PCI Gateway
 
-To make the integration work, it's necessary to create an configuration on VTEX Gateway's admin (our payment backend), with all the extra information necessary to the transaction (like the acquirer affiliation id or token).
+To make the integration work, it's necessary to create a configuration on VTEX Gateway's admin (our payment backend), with all the extra information necessary to the transaction (like the acquirer affiliation id or token).
 
-To create any extra configuration you just need to pass to the instore team (instoredevs@vtex.com.br) what are the extra params needed to your app do the transaction and we will create a form on VTEX Gateway so that the client can configure it.
+To create any extra configuration you just need to send to instore team (instoredevs@vtex.com.br) the extra params your app need to complete the transaction and we will create a form on VTEX Gateway so the client can configure it.
 
 The AppLinking integration doesn't include any other dependency, since the communication between the inStore app and the payment app happens with specific URIs with all the configuration and payment params that are necessary to do the action.
 
 > Observation:
 >
-> On Android, all communication must happen with a new `Intent`, so you shouldn't send the response as a `callback` of the initial Intent, instead you should send a new `Intent` to inStore app with the response to the original `Intent`.
+> On Android, all communication must happen with a new `Intent`, so you shouldn't send the response as a `callback` of the initial `Intent`, instead you should send a new `Intent` to inStore app with the response to the first one.
 
 ## Types of configuration fields
 
 * General (all apps have):
   * acquirerProtocol: string (ex.: stone, cielo-lio, cappta, vtex-sitef, seeed etc.) - AppLinking Protocol (scheme of each payment app)
-  * scheme: string (The scheme of the app that the `Intent` with the response will call, that by default will be "instore")
-  * autoConfirm (by default its value is "true". Can be used on the payment app to know that the app doesn't need to ask to the user any other permission to do the action)
+  * scheme: string (The app scheme payment apps `Intent`s will respond to, by default it will be "instore")
+  * autoConfirm (by default its value is "true". Indicates to the payment app it doesn't need to ask any additional permission to the user in order to complete the action)
   * acquirerId: string (ex.:<stone_code>, <sitef_storeId>) affiliation id of the acquirer that is registered on VTEX Gateway
 
-If it's necessary, inStore can send additional information. Example with the acquirer Cappta:
+If it's necessary, inStore can send additional information. Acquirer Cappta example:
 
 * Cappta
   * authKey: string (e.g. "<cappta_authKey>")
@@ -35,13 +35,13 @@ If it's necessary, inStore can send additional information. Example with the acq
 URI pattern that is sent by the AppLinking:
 
 ```
-<acquirerProtocol>://<action>?<parametros>
+<acquirerProtocol>://<action>?<params>
 ```
 
 URI pattern that is received by the AppLinking:
 
 ```
-instore://<action>?<parametros_de_resposta>
+instore://<action>?<response_params>
 ```
 
 * action: An option between `payment` and `payment-reversal` (refund action to a previous payment).
@@ -54,29 +54,29 @@ Context of payment that is used to assemble the URI (so that is easier to read):
 
 ```
 {
-  acquirerProtocol: "super-adquirente",
+  acquirerProtocol: "super-acquirer",
   action: "payment",
   acquirerId: "954090369",
   installmentType: 2,
   installments: 3,
   paymentId: "1093019888",
   paymentType: "debit",  // could be credit also
-  amount: 10, // as apps esperam o valor em centavos (10 centavos)
-  installmentsInterestRate: "1%", (se não tiver juros, então não é nem para estar no mobileLinkingUrl)
+  amount: 10, // payment apps usually expect the amount in cents (10 cents)
+  installmentsInterestRate: "1%", (if the order doesn't have interest rate it shouldn't be on mobileLinkingUrl)
   transactionId: "1093019039",
   scheme: "instore",
   autoConfirm: "true",
   paymentSystem: 44,
   paymentSystemName: "Venda Direta Debito",
   paymentGroupName: "debitDirectSalePaymentGroup",
-  mobileLinkingUrl: "super-adquirente://payment?acquirerId=954090369&paymentId=1093019888&paymentType=debit&amount=10&installments=3&transactionId=1093019039&autoConfirm=true&scheme=instore"
+  mobileLinkingUrl: "super-acquirer://payment?acquirerId=954090369&paymentId=1093019888&paymentType=debit&amount=10&installments=3&transactionId=1093019039&autoConfirm=true&scheme=instore"
 }
 ```
 
-Final URI with the previous context that the payment app will receive to do the payment:
+Final URI with the previous context that the payment app will receive in order to execute the payment action:
 
 ```
-super-adquirente://payment?acquirerProtocol=super-adquirente&action=payment&acquirerId=954090369&installmentType=2&installments=3&paymentId=1093019888&paymentType=debit&amount=10&installmentsInterestRate=1%&transactionId=1093019039&paymentSystem=44&paymentSystemName=Venda%20Direta%20Debito&paymentGroupName=debitDirectSalePaymentGroup&scheme=instore&autoConfirm=true
+super-acquirer://payment?acquirerProtocol=super-acquirer&action=payment&acquirerId=954090369&installmentType=2&installments=3&paymentId=1093019888&paymentType=debit&amount=10&installmentsInterestRate=1%&transactionId=1093019039&paymentSystem=44&paymentSystemName=Venda%20Direta%20Debito&paymentGroupName=debitDirectSalePaymentGroup&scheme=instore&autoConfirm=true
 ```
 
 With the response of this AppLinking, will be possible to refund this payment.
@@ -88,7 +88,7 @@ Context of the refund that is used to assemble the URI (so that is easier to rea
 
 ```
 {
-  acquirerProtocol: "super-adquirente",
+  acquirerProtocol: "super-acquirer",
   action: "payment-reversal",
   acquirerId: "954090369",
   transactionId: "1093019039",
@@ -97,14 +97,14 @@ Context of the refund that is used to assemble the URI (so that is easier to rea
   administrativeCode: "11010103033", // This value is expected to be received from the payment and is saved on VTEX Gateway
   autoConfirm: "true",
   scheme: "instore",
-  mobileLinkingUrl: "super-adquirente://payment-reversal?acquirerId=954090369&paymentId=1093019888&transactionId=1093019039&autoConfirm=true&scheme=instore"
+  mobileLinkingUrl: "super-acquirer://payment-reversal?acquirerId=954090369&paymentId=1093019888&transactionId=1093019039&autoConfirm=true&scheme=instore"
 }
 ```
 
-Final URI with the previous context that the payment app will receive to do the refund:
+Final URI with the previous context that the payment app will receive in order to execute the refund action:
 
 ```
-super-adquirente://payment-reversal?acquirerId=954090369&transactionId=1093019039&paymentId=1093019888&acquirerTid=1093019888&administrativeCode=11010103033&autoConfirm=true&scheme=instore
+super-acquirer://payment-reversal?acquirerId=954090369&transactionId=1093019039&paymentId=1093019888&acquirerTid=1093019888&administrativeCode=11010103033&autoConfirm=true&scheme=instore
 ```
 
 > Observation:
@@ -120,8 +120,8 @@ super-adquirente://payment-reversal?acquirerId=954090369&transactionId=109301903
 URI:
 
 ```
-Success: instore://payment?responsecode=0&<parametros_de_resposta>
-Failed:   instore://payment?responsecode=110&reason=erro+no+cartao+cancelado+pelo+cliente&paymentId=<value_of_the_sender_URI>
+Success: instore://payment?responsecode=0&<response_params>
+Failed:   instore://payment?responsecode=110&reason=card+refused+by+acquirer&paymentId=<value_of_the_sender_URI>
 ```
 
 Response parameters:
@@ -131,7 +131,7 @@ Response parameters:
   * cardBrandName: string (name of the card brand, like "mastercard", "visa", etc.)
   * acquirerName: string (name of the acquirer - optional)
   * acquirerTid: string (identification of the payment on the acquirer)
-  * acquirerAuthorizationCode or administrativeCode: string (authorization code that the app will receive on a refund action to authorize it)
+  * acquirerAuthorizationCode or administrativeCode: string (authorization code needed to authorize a refund action)
   * merchantReceipt: string (receipt text to the merchant, that should be encoded on the URI)
   * customerReceipt: string (receipt text to the customer, that should be encoded on the URI)
   * responsecode: int (0 means success and "a value bigger than 0" means an error code of the acquirer and in this case the parameter "reason" will be an error message)
@@ -144,15 +144,15 @@ Response parameters:
 URI:
 
 ```
-Success: instore://payment-reversal?responsecode=0&<parametros_de_resposta>
-Failed:   instore://payment-reversal?responsecode=110&reason=erro+no+cartao+cancelado+pelo+cliente&paymentId=<valor_enviado_na_ida>
+Success: instore://payment-reversal?responsecode=0&<response_params>
+Failed:   instore://payment-reversal?responsecode=110&reason=card+refused+by+acquirer&paymentId=<value_of_the_sender_URI>
 ```
 
 Response parameters:
   * scheme: "instore"
   * action: "payment-reversal"
   * paymentId: string (e.g. "1093019888") to identify what payment was refunded
-  * acquirerAuthorizationCode or administrativeCode: string (authorization code that an acquirer can also give to an refund)
+  * acquirerAuthorizationCode or administrativeCode: string (authorization code that an acquirer can also give to a refund)
   * merchantReceipt: string (receipt text to the merchant for the refund, that should be encoded on the URI)
   * customerReceipt: string (receipt text to the customer for the refund, that should be encoded on the URI)
   * responsecode: int (0 means success and "a value bigger than 0" means an error code of the acquirer and in this case the parameter "reason" will be an error message)
