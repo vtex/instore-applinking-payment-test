@@ -1,6 +1,6 @@
 # App Linking
 
-Esse documento explica como a app do inStore configurará e fará o AppLinking para as ações de: `configuration`, `payment` e `payment-reversal` com as apps dos adquirentes.
+Esse documento explica como a app do inStore configurará e fará o AppLinking para as ações de: `payment` e `payment-reversal` com as apps dos adquirentes.
 
 
 ## Gateway da VTEX
@@ -43,30 +43,9 @@ Padrão da url de volta do applinking:
 instore://<action>?<parametros_de_resposta>
 ```
 
-* action: é uma opção entre `configuration`, `payment` e `payment-reversal` (ação de estorno de um pagamento).
+* action: é uma opção entre `payment` e `payment-reversal` (ação de estorno de um pagamento).
 
 ### Exemplos de ida para cada ação
-
-##### - Exemplo de ação de "configuration":
-
-Contexto de configuração usado para montar a URL:
-
-```
-{
-  acquirerProtocol: "super-adquirente",
-  action: "configuration",
-  acquirerId: "954090369",
-  scheme: "instore",
-  mobileLinkingUrl: "super-adquirente://configuration?acquirerId=954090369&scheme=instore"
-}
-```
-
-URL:
-
-```
-super-adquirente://configuration?acquirerProtocol=super-adquirente&action=configuration&acquirerId=954090369&scheme=instore
-```
-
 
 ##### - Exemplo de ação de "payment":
 
@@ -137,16 +116,6 @@ super-adquirente://payment-reversal?acquirerId=954090369&transactionId=109301903
 
 ### Respostas das ações
 
-##### - Exemplo de resposta da ação de "configuration":
-
-
-URL:
-
-```
-Successo: instore://configuration?responsecode=0
-Falhou:   instore://configuration?responsecode=100&reason=codigo+100+problema+no+pinpad
-```
-
 ##### - Exemplo de resposta da ação de "payment":
 
 URL:
@@ -184,7 +153,7 @@ Parâmetros de resposta:
   * scheme: "instore"
   * action: "payment-reversal"
   * paymentId: string (e.g. "1093019888") para identificar qual pagamento foi estornado
-  * acquirerAuthorizationCode ou administrativeCode: string (código de autorização que recebemos da adquirente no pagamento e repassamos no momento do estorno)
+  * acquirerAuthorizationCode ou administrativeCode: string (código de autorização que a adquirente pode mandar relativo ao estorno)
   * merchantReceipt: string (recibo do estabelecimento do estorno)
   * customerReceipt: string (recibo do cliente do estorno)
   * responsecode: int (0 significa sucesso e um "número maior que 0" significa um código de erro do adquirente e nesse caso reason será uma mensagem de erro)
