@@ -123,7 +123,7 @@ URI:
 
 ```
 Success: instore://payment?responsecode=0&<response_params>
-Failed:   instore://payment?responsecode=110&reason=card+refused+by+acquirer&paymentId=<value_of_the_sender_URI>
+Failed:  instore://payment?responsecode=110&reason=card+refused+by+acquirer&paymentId=<value_of_the_sender_URI>
 ```
 
 Response parameters:
@@ -147,7 +147,7 @@ URI:
 
 ```
 Success: instore://payment-reversal?responsecode=0&<response_params>
-Failed:   instore://payment-reversal?responsecode=110&reason=card+refused+by+acquirer&paymentId=<id_sent_previously>
+Failed:  instore://payment-reversal?responsecode=110&reason=card+refused+by+acquirer&paymentId=<id_sent_previously>
 ```
 
 Response parameters:
