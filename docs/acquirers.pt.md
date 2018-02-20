@@ -56,7 +56,7 @@ Contexto do pagamento usado para montar a URL:
   acquirerProtocol: "super-adquirente",
   action: "payment",
   acquirerId: "954090369",
-  installmentType: 2,
+  installmentType: 2, // 1: Os juros de cada parcela são assumidos pela administradora ou banco do cartão e 2: O Lojista assume os juros
   installments: 3,
   paymentId: "1093019888",
   paymentType: "credit",
