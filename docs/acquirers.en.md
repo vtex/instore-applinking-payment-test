@@ -58,7 +58,7 @@ Context of payment that is used to assemble the URI (so that is easier to read):
   acquirerProtocol: "super-acquirer",
   action: "payment",
   acquirerId: "954090369",
-  installmentType: 2,
+  installmentType: 2, // 1: The interests are for each installments are from the bank or credit card administrator and 2: the store assume any interest for the installments
   installments: 3,
   paymentId: "1093019888",
   paymentType: "debit",  // could also be credit
