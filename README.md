@@ -19,6 +19,10 @@ You can link back to this app with the URI:
 vtex-payment-test://payment?params // for payment applinking
 vtex-payment-test://payment-reversal?params // for a refund applinking
 
+## Example of an payment app
+
+You can see an Android payment example app here: https://github.com/vtex/payment-example-app
+
 ## Development
 
 Execute any make command on the terminal of your machine (normally works on Linux and Mac).
