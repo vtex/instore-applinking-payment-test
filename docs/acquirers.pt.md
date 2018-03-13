@@ -18,7 +18,7 @@ A integração via AppLinking não inclui nenhuma dependência extra, uma vez qu
 * Geral (todos os adquirentes terão):
   * acquirerProtocol: string (ex.: stone, cielo-lio, cappta, vtex-sitef, etc.) - qual o protocolo do applinking (scheme de cada app)
   * scheme: string (protocolo para as respostas já preenchido por padrão com o protocolo "instore" que é a app da vtex que fará a integração com os adquirentes)
-  * autoConfirm (já preenchido por padrão com "true". Pode ser utilizado para avisar a app que não é necessário pedir confirmação extra do usuário para fazer a transação)
+  * autoConfirm (já preenchido por padrão com "True". Pode ser utilizado para avisar a app que não é necessário pedir confirmação extra do usuário para fazer a transação)
   * acquirerId: string (ex.:<stone_code>, <sitef_storeId>) id da afiliação cadastrado no gateway da VTEX
 
 Se for necessário, podemos enviar informações específicas que sejam importantes para a adquirente. Exemplo:
@@ -64,19 +64,19 @@ Contexto do pagamento usado para montar a URL:
   installmentsInterestRate: "1%", (se não tiver juros, então não é nem para estar no mobileLinkingUrl)
   transactionId: "1093019039",
   scheme: "instore",
-  autoConfirm: "true",
+  autoConfirm: "True",
   paymentSystem: 44,
   paymentSystemName: "Venda Direta Debito",
   paymentGroupName: "debitDirectSalePaymentGroup",
   callbackUrl: "https://dominio/gatewayCallback/.../", // Para mandarmos a resposta, não precisa estar no mobileLinkingUrl
-  mobileLinkingUrl: "super-adquirente://payment?acquirerId=954090369&paymentId=1093019888&paymentType=credit&amount=10&installments=3&transactionId=1093019039&autoConfirm=true&scheme=instore"
+  mobileLinkingUrl: "super-adquirente://payment?acquirerId=954090369&paymentId=1093019888&paymentType=credit&amount=10&installments=3&transactionId=1093019039&autoConfirm=True&scheme=instore"
 }
 ```
 
 URL:
 
 ```
-super-adquirente://payment?acquirerProtocol=super-adquirente&action=payment&acquirerId=954090369&installmentType=2&installments=3&paymentId=1093019888&paymentType=credit&amount=10&installmentsInterestRate=1%&transactionId=1093019039&paymentSystem=44&paymentSystemName=Venda%20Direta%20Debito&paymentGroupName=debitDirectSalePaymentGroup&scheme=instore&autoConfirm=true
+super-adquirente://payment?acquirerProtocol=super-adquirente&action=payment&acquirerId=954090369&installmentType=2&installments=3&paymentId=1093019888&paymentType=credit&amount=10&installmentsInterestRate=1%&transactionId=1093019039&paymentSystem=44&paymentSystemName=Venda%20Direta%20Debito&paymentGroupName=debitDirectSalePaymentGroup&scheme=instore&autoConfirm=True
 ```
 
 Com os valores de resposta para o pagamento, será possível fazer o estorno.
@@ -95,17 +95,17 @@ Contexto do estorno:
   paymentId: "1093019888",
   acquirerTid: "1093019888",
   administrativeCode: "11010103033", // Foi pego nos parâmetros de volta do pagamento e salvo no gateway
-  autoConfirm: "true",
+  autoConfirm: "True",
   scheme: "instore",
   callbackUrl: "https://dominio/gatewayCallback/.../", // Para mandarmos a resposta, não precisa estar no mobileLinkingUrl
-  mobileLinkingUrl: "super-adquirente://payment-reversal?acquirerId=954090369&paymentId=1093019888&transactionId=1093019039&autoConfirm=true&scheme=instore"
+  mobileLinkingUrl: "super-adquirente://payment-reversal?acquirerId=954090369&paymentId=1093019888&transactionId=1093019039&autoConfirm=True&scheme=instore"
 }
 ```
 
 URL:
 
 ```
-super-adquirente://payment-reversal?acquirerId=954090369&transactionId=1093019039&paymentId=1093019888&acquirerTid=1093019888&administrativeCode=11010103033&autoConfirm=true&scheme=instore
+super-adquirente://payment-reversal?acquirerId=954090369&transactionId=1093019039&paymentId=1093019888&acquirerTid=1093019888&administrativeCode=11010103033&autoConfirm=True&scheme=instore
 ```
 
 > Observação:
